@@ -43,7 +43,7 @@ const Login = () => {
     <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
       <Paper elevation={3} sx={{ padding: 4, width: 400, textAlign: "center" }}>
         <Typography variant="h5" fontWeight="bold" mb={2}>
-          Login to TaskMaster
+          Login to Task Management App
         </Typography>
         <form onSubmit={handleSubmit}>
           <TextField

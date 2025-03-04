@@ -7,7 +7,7 @@ const Footer = () => {
       sx={{ background: "#1a237e", color: "white", textAlign: "center", py: 2 }}
     >
       <Typography variant="body1">
-        © 2025 TaskMaster. All Rights Reserved.
+        © 2025 Task Management App. All Rights Reserved.
       </Typography>
     </Box>
   );

@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 const testimonials = [
   {
     name: "Alice Johnson",
-    review: "TaskMaster transformed the way I organize my tasks. A game-changer!",
+    review: "Task Management App transformed the way I organize my tasks. A game-changer!",
     avatar: "https://randomuser.me/api/portraits/women/44.jpg"
   },
   {

@@ -17,7 +17,7 @@ const Navbar = () => {
           component={Link}
           to="/"
         >
-          TaskMaster
+          Task Management App
         </Typography>
         <Box>
           <Button color="inherit" component={Link} to="/login">
