@@ -92,7 +92,7 @@ const TaskManagement = () => {
   return (
     <Container sx={{ mt: 4 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        <Typography variant="h4">Task Management System</Typography>
+        <Typography variant="h4">Task List</Typography>
         <Button variant="contained" color="primary" onClick={handleOpen}>Add New Task</Button>
       </Box>
 
