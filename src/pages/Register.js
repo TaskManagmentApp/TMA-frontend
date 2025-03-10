@@ -5,7 +5,9 @@ import Swal from "sweetalert2";
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
     email: "",
     password: "",
   });
@@ -43,12 +45,30 @@ const Register = () => {
         <form onSubmit={handleSubmit}>
           <TextField
             fullWidth
-            label="Name"
-            name="name"
+            label="First Name"
+            name="firstName"
             variant="outlined"
             margin="normal"
             required
-            value={formData.name}
+            value={formData.firstName}
+            onChange={handleChange}
+          />
+          <TextField
+            fullWidth
+            label="Last Name"
+            name="lastName"
+            variant="outlined"
+            margin="normal"
+            value={formData.lastName}
+            onChange={handleChange}
+          />
+          <TextField
+            fullWidth
+            label="Phone Number"
+            name="phoneNumber"
+            variant="outlined"
+            margin="normal"
+            value={formData.phoneNumber}
             onChange={handleChange}
           />
           <TextField
@@ -79,7 +99,7 @@ const Register = () => {
             fullWidth
             sx={{ mt: 2 }}
           >
-            Register
+            Signup
           </Button>
         </form>
         <Typography variant="body2" mt={2}>

@@ -1,15 +1,15 @@
 import React, { useState } from "react";
-import { Box, Typography, TextField, Button, Paper } from "@mui/material";
+import { Box, Typography, TextField, Button, Paper, Snackbar, Alert } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import Swal from "sweetalert2";
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
+  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
   const navigate = useNavigate();
 
-  const dummyUser = {
-    email: "admin@acme.com",
+  const adminUser = {
+    email: "admin@gmail.com",
     password: "123456"
   };
 
@@ -20,22 +20,14 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (formData.email === dummyUser.email && formData.password === dummyUser.password) {
-      Swal.fire({
-        icon: "success",
-        title: "Login Successful!",
-        text: "Redirecting to tasks...",
-        showConfirmButton: false,
-        timer: 2000
-      }).then(() => {
+    if (formData.email === adminUser.email && formData.password === adminUser.password) {
+      setSnackbar({ open: true, message: "Login Successful! Redirecting...", severity: "success" });
+
+      setTimeout(() => {
         navigate("/tasks"); // Redirect to tasks page
-      });
+      }, 2000);
     } else {
-      Swal.fire({
-        icon: "error",
-        title: "Invalid Credentials",
-        text: "Please check your email and password.",
-      });
+      setSnackbar({ open: true, message: "Invalid Credentials!", severity: "error" });
     }
   };
 
@@ -72,9 +64,21 @@ const Login = () => {
           </Button>
         </form>
         <Typography variant="body2" mt={2}>
-          Don't have an account? <Link  to="/register">Sign Up</Link>
+          Don't have an account? <Link to="/register">Sign Up</Link>
         </Typography>
       </Paper>
+
+      {/* Snackbar for notifications */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }} // Show on top-right
+      >
+        <Alert onClose={() => setSnackbar({ ...snackbar, open: false })} severity={snackbar.severity}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

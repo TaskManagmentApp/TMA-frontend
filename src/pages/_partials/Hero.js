@@ -49,7 +49,7 @@ const Hero = () => {
             component={Link}
             to="/register"
           >
-            Get Started
+            Signup
           </Button>
         </motion.div>
       </Container>
