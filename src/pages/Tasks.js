@@ -18,23 +18,30 @@ import {
   Box,
   Snackbar,
   Alert,
+  Select,
+  FormControl,
+  InputLabel
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 const TaskManagement = () => {
   const [tasks, setTasks] = useState([
-    { id: 1, title: "Fix Login Bug", description: "Resolve the issue where users can't log in.", dueDate: "2024-03-01", priority: "High", status: "In Progress", category: "Backend" },
-    { id: 2, title: "Design Homepage", description: "Create a modern homepage layout.", dueDate: "2024-03-05", priority: "Medium", status: "Pending", category: "Frontend" },
-    { id: 3, title: "Database Optimization", description: "Improve query performance.", dueDate: "2024-03-10", priority: "High", status: "Completed", category: "Database" },
+    { id: 1, title: "Fix Login Bug", description: "Resolve login issue", dueDate: "2024-03-01", priority: "High", status: "In Progress", project: "Website Redesign" },
+    { id: 2, title: "Design Homepage", description: "Create homepage layout", dueDate: "2024-03-05", priority: "Medium", status: "Pending", project: "E-commerce App" },
+    { id: 3, title: "Optimize Database", description: "Improve query performance", dueDate: "2024-03-10", priority: "High", status: "Completed", project: "Internal Dashboard" },
+    { id: 4, title: "Create API Endpoints", description: "Develop REST API", dueDate: "2024-03-15", priority: "Low", status: "Pending", project: "Mobile App" }
   ]);
+
+  const [projects] = useState(["Website Redesign", "E-commerce App", "Internal Dashboard", "Mobile App"]);
+  const [statusOptions] = useState(["Pending", "In Progress", "Completed"]);
+  const [priorityOptions] = useState(["High", "Medium", "Low"]);
 
   const [open, setOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [currentTask, setCurrentTask] = useState({ id: null, title: "", description: "", dueDate: "", priority: "", status: "" });
+  const [currentTask, setCurrentTask] = useState({ id: null, title: "", description: "", dueDate: "", priority: "Medium", status: "Pending", project: "" });
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedTaskId, setSelectedTaskId] = useState(null);
 
-  // Snackbar state
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
@@ -46,7 +53,7 @@ const TaskManagement = () => {
   };
 
   const handleOpen = () => {
-    setCurrentTask({ id: null, title: "", description: "", dueDate: "", priority: "", status: "" });
+    setCurrentTask({ id: null, title: "", description: "", dueDate: "", priority: "Medium", status: "Pending", project: "" });
     setEditMode(false);
     setOpen(true);
   };
@@ -116,8 +123,8 @@ const TaskManagement = () => {
                 <Typography variant="body2" color="text.secondary">{task.description}</Typography>
                 <Typography variant="body2" mt={1}><strong>Due Date:</strong> {task.dueDate}</Typography>
                 <Typography variant="body2"><strong>Priority:</strong> {task.priority}</Typography>
-                <Typography variant="body2"><strong>Status:</strong> {task.status}</Typography>
-                <Chip label={task.status} color="primary" sx={{ mt: 2 }} />
+                <Typography variant="body2"><strong>Project:</strong> {task.project}</Typography>
+                <Chip label={task.status} color={task.status === "Pending" ? "warning" : task.status === "In Progress" ? "primary" : "success"} sx={{ mt: 2 }} />
               </CardContent>
             </Card>
           </Grid>
@@ -131,26 +138,42 @@ const TaskManagement = () => {
           <TextField label="Title" fullWidth margin="normal" value={currentTask.title} onChange={(e) => setCurrentTask({ ...currentTask, title: e.target.value })} />
           <TextField label="Description" fullWidth multiline rows={3} margin="normal" value={currentTask.description} onChange={(e) => setCurrentTask({ ...currentTask, description: e.target.value })} />
           <TextField label="Due Date" type="date" fullWidth margin="normal" value={currentTask.dueDate} onChange={(e) => setCurrentTask({ ...currentTask, dueDate: e.target.value })} InputLabelProps={{ shrink: true }} />
-          <TextField label="Priority" fullWidth margin="normal" value={currentTask.priority} onChange={(e) => setCurrentTask({ ...currentTask, priority: e.target.value })} />
-          <TextField label="Status" fullWidth margin="normal" value={currentTask.status} onChange={(e) => setCurrentTask({ ...currentTask, status: e.target.value })} />
+
+          {/* Priority Dropdown */}
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Priority</InputLabel>
+            <Select value={currentTask.priority} onChange={(e) => setCurrentTask({ ...currentTask, priority: e.target.value })}>
+              {priorityOptions.map((priority, index) => (
+                <MenuItem key={index} value={priority}>{priority}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          {/* Status Dropdown */}
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Status</InputLabel>
+            <Select value={currentTask.status} onChange={(e) => setCurrentTask({ ...currentTask, status: e.target.value })}>
+              {statusOptions.map((status, index) => (
+                <MenuItem key={index} value={status}>{status}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          {/* Project Dropdown */}
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Project</InputLabel>
+            <Select value={currentTask.project} onChange={(e) => setCurrentTask({ ...currentTask, project: e.target.value })}>
+              {projects.map((project, index) => (
+                <MenuItem key={index} value={project}>{project}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="secondary">Cancel</Button>
           <Button onClick={handleSave} color="primary">Save</Button>
         </DialogActions>
       </Dialog>
-
-      {/* Snackbar for notifications */}
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={() => setSnackbarOpen(false)}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      >
-        <Alert onClose={() => setSnackbarOpen(false)} severity={snackbarSeverity} sx={{ width: "100%" }}>
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
     </Container>
   );
 };
