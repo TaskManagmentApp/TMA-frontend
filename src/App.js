@@ -10,31 +10,30 @@ import Testimonials from "./pages/_partials/Testimonials";
 import SocialMedia from "./pages/_partials/SocialMedia";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-
-// Auth Context
-export const AuthContext = createContext();
-
+import Projects from "./pages/Projects";
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const user = localStorage.getItem("user");
+    const user = localStorage.getItem("userData");
     setIsAuthenticated(!!user);
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
+    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
       <Router>
-        <Navbar />
+        <Navbar setIsAuthenticated={setIsAuthenticated}/>
         <Routes>
           <Route path="/" element={<><Hero /><Features /><Testimonials /><CTA /><SocialMedia /></>} />
-          <Route path="/login" element={isAuthenticated ? <Navigate to="/tasks" /> : <Login />} />
+          <Route path="/login" element={isAuthenticated ? <Navigate to="/tasks" /> : <Login  setIsAuthenticated={setIsAuthenticated}/>} />
           <Route path="/register" element={<Register />} />
           <Route path="/tasks" element={isAuthenticated ? <Tasks /> : <Navigate to="/login" />} />
+          <Route path="/projects" element={<Projects />} />
+
         </Routes>
         <Footer />
       </Router>
-    </AuthContext.Provider>
+    </div>
   );
 }
 

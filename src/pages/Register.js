@@ -1,16 +1,18 @@
 import React, { useState } from "react";
-import { Box, Typography, TextField, Button, Paper } from "@mui/material";
+import { Box, Typography, TextField, Button, Paper,Select,FormControl,InputLabel,MenuItem } from "@mui/material";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    phoneNumber: "",
+    username: "",
+    phone: "",
     email: "",
     password: "",
+    address:"",
+    role:"standard"
   });
+  const [roles] = useState(["admin", "standard"]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -46,29 +48,11 @@ const Register = () => {
           <TextField
             fullWidth
             label="First Name"
-            name="firstName"
+            name="username"
             variant="outlined"
             margin="normal"
             required
-            value={formData.firstName}
-            onChange={handleChange}
-          />
-          <TextField
-            fullWidth
-            label="Last Name"
-            name="lastName"
-            variant="outlined"
-            margin="normal"
-            value={formData.lastName}
-            onChange={handleChange}
-          />
-          <TextField
-            fullWidth
-            label="Phone Number"
-            name="phoneNumber"
-            variant="outlined"
-            margin="normal"
-            value={formData.phoneNumber}
+            value={formData.username}
             onChange={handleChange}
           />
           <TextField
@@ -83,6 +67,25 @@ const Register = () => {
           />
           <TextField
             fullWidth
+            label="Phone Number"
+            name="phoneNumber"
+            variant="outlined"
+            margin="normal"
+            value={formData.phone}
+            onChange={handleChange}
+          />
+          <TextField
+            fullWidth
+            label="Address"
+            name="address"
+            variant="outlined"
+            margin="normal"
+            required
+            value={formData.address}
+            onChange={handleChange}
+          />
+          <TextField
+            fullWidth
             label="Password"
             name="password"
             type="password"
@@ -92,6 +95,14 @@ const Register = () => {
             value={formData.password}
             onChange={handleChange}
           />
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Role</InputLabel>
+            <Select>
+              {roles.map((role, index) => (
+                <MenuItem key={index} value={role}>{role}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           <Button
             type="submit"
             variant="contained"
