@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Box, Container, Typography, Button } from "@mui/material";
 
 const CTA = () => {
@@ -22,9 +23,10 @@ const CTA = () => {
           variant="contained"
           color="secondary"
           size="large"
+          component={Link} to="/register"
           sx={{ mt: 4 }}
         >
-          Get Started
+          Signup
         </Button>
       </Container>
     </Box>
