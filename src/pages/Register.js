@@ -47,7 +47,7 @@ const Register = () => {
         <form onSubmit={handleSubmit}>
           <TextField
             fullWidth
-            label="First Name"
+            label="Name"
             name="username"
             variant="outlined"
             margin="normal"
@@ -61,7 +61,6 @@ const Register = () => {
             name="email"
             variant="outlined"
             margin="normal"
-            required
             value={formData.email}
             onChange={handleChange}
           />
@@ -80,7 +79,6 @@ const Register = () => {
             name="address"
             variant="outlined"
             margin="normal"
-            required
             value={formData.address}
             onChange={handleChange}
           />
