@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
-import { useState, useEffect, createContext } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "./pages/_partials/Navbar";
 import Tasks from "./pages/Tasks";
 import Features from "./pages/_partials/Features";

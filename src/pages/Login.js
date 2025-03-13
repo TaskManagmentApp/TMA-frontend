@@ -7,34 +7,54 @@ const Login = ({setIsAuthenticated}) => {
   const [formData, setFormData] = useState({ name: "", password: "" });
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
   const navigate = useNavigate();
+
   const handleChange = (e) => {
+    // Update form data state when user types in input fields
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Send API request to Django backend for authentication
+
     try {
-      const response =await api.post("auth/login/", {
+      // Send login request to Django backend
+      const response = await api.post("auth/login/", {
         username: formData.name,
         password: formData.password,
       });
-      // If login is successful, save the tokens to localStorage
-      const { access, refresh,user,message } = response.data;
-      localStorage.setItem("access_token", access);
-      localStorage.setItem("refresh_token", refresh);
-      localStorage.setItem("userData",JSON.stringify(user));
-      localStorage.setItem("isAuthenticated",true);
-      // Update the authentication state and show success snackbar
-      setIsAuthenticated(true);
-      // navi
-      setSnackbar({ open: true, message:message, severity: "success" });
-      // Redirect to the tasks page
-       navigate("/tasks");
+
+      console.log(response, "RES"); // Debugging log
+
+      // Ensure response data exists before destructuring
+      if (response?.data) {
+        const { access, refresh, user, message } = response.data;
+
+        // Store authentication tokens and user data in local storage
+        localStorage.setItem("access_token", access);
+        localStorage.setItem("refresh_token", refresh);
+        localStorage.setItem("userData", JSON.stringify(user));
+        localStorage.setItem("isAuthenticated", "true"); // Ensure it's stored as a string
+
+        // Update authentication state and show success message
+        setIsAuthenticated(true);
+        setSnackbar({ open: true, message: message || "Login successful", severity: "success" });
+
+        // Redirect user to tasks page after successful login
+        navigate("/tasks");
+      } else {
+        throw new Error("Invalid response from server");
+      }
     } catch (error) {
-      // If login fails, show error snackbar
-      setSnackbar({ open: true, message: error.response?.data?.message ? error.response?.data?.message : error.response.data.detail, severity: "error" });
+      console.error("Login error:", error);
+
+      // Handle cases where error response is missing or malformed
+      const errorMessage = error.response?.data?.message || error.response?.data?.detail || "Login failed. Please try again.";
+      
+      // Show error message in snackbar
+      setSnackbar({ open: true, message: errorMessage, severity: "error" });
     }
   };
+
   return (
     <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
       <Paper elevation={3} sx={{ padding: 4, width: 400, textAlign: "center" }}>

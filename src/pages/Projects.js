@@ -3,53 +3,64 @@ import {
   Container, Card, CardContent, Typography, 
   CircularProgress, Alert, Button, Modal, Box, TextField, Stack ,Snackbar
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import axios from "../utils/headers"; // Your axios instance
 
 const ProjectPage = () => {
-  const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [newProjectName, setNewProjectName] = useState("");
-  const [adding, setAdding] = useState(false); // To handle button loading state
-  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
-  const navigate = useNavigate();
-  const userData = JSON.parse(localStorage.getItem("userData"));
-  // Fetch Projects on Component Mount
-  useEffect(() => {
-    axios.get("/projects/list/")
-      .then((response) => {
-        setProjects(response.data);
-        setLoading(false);
-      })
-      .catch(() => {
-        setError("Failed to load projects");
-        setLoading(false);
-      });
-  }, []);
-
-  // Function to Handle Adding a New Project
-  const handleAddProject = () => {
-    if (!newProjectName.trim()) return; // Prevent empty submissions
-
-    setAdding(true);
-    axios.post("/projects/create/", { name: newProjectName })
-      .then((response) => {
-        setSnackbar({ open: true, message:"Project Added Successfully", severity: "success" });
-        setProjects([...projects, response.data]); // Append new project
-        setNewProjectName("");
-        setModalOpen(false);
-      })
-      .catch(() =>
-        {
-            setSnackbar({ open: true, message:"Failed to add project", severity: "error" });
+    const [projects, setProjects] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [newProjectName, setNewProjectName] = useState("");
+    const [adding, setAdding] = useState(false); // To handle button loading state
+    const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
+    const userData = JSON.parse(localStorage.getItem("userData"));
+    
+    // ✅ Fetch Projects on Component Mount
+    useEffect(() => {
+      axios.get("/projects/list/")
+        .then((response) => {
+          setProjects(response.data); // Store projects in state
+          setLoading(false);
         })
-      .finally(() => setAdding(false));
-  };
-
-  if (loading) return <CircularProgress sx={{ display: "block", margin: "auto", mt: 5 }} />;
-  if (error) return <Alert severity="error">{error}</Alert>;
+        .catch((error) => {
+          console.error("Error fetching projects:", error);
+          setError("Failed to load projects"); // Set error message
+          setLoading(false);
+        });
+    }, []);
+    
+    // ✅ Function to Handle Adding a New Project
+    const handleAddProject = () => {
+      if (!newProjectName.trim()) {
+        setSnackbar({ open: true, message: "Project name cannot be empty", severity: "warning" });
+        return; // Prevent empty submissions
+      }
+    
+      setAdding(true); // Show button loading state
+    
+      axios.post("/projects/create/", { name: newProjectName })
+        .then((response) => {
+          setSnackbar({ open: true, message: "Project Added Successfully", severity: "success" });
+    
+          // ✅ Append new project to state without mutating the original array
+          setProjects((prevProjects) => [...prevProjects, response.data]);
+    
+          setNewProjectName(""); // Clear input field
+          setModalOpen(false); // Close modal
+        })
+        .catch((error) => {
+          console.error("Error adding project:", error);
+          setSnackbar({ open: true, message: "Failed to add project", severity: "error" });
+        })
+        .finally(() => setAdding(false)); // Remove button loading state
+    };
+    
+    // ✅ Display loading state
+    if (loading) return <CircularProgress sx={{ display: "block", margin: "auto", mt: 5 }} />;
+    
+    // ✅ Display error message if fetching fails
+    if (error) return <Alert severity="error">{error}</Alert>;
+    
 
   return (
     <Container>
