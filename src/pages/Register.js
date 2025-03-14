@@ -51,7 +51,15 @@ const Register = ({ setIsAuthenticated }) => {
   };
 
   const handleChange = (e) => {
-    setErrors({ ...errors, [e.target.name]: e.target.value ? "" : `${e.target.label} is required` });
+    const { name, value } = e.target;
+
+  setErrors({
+    ...errors,
+    [name]: value ? "" : `${name.charAt(0).toUpperCase() + name.slice(1)} is required`,
+  });
+
+  setFormData({ ...formData, [name]: value });
+    // setErrors({ ...errors, [e.target.name]: e.target.value ? "" : `${e.target.label} is required` });
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
