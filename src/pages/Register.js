@@ -9,12 +9,10 @@ import {
   FormControl,
   InputLabel,
   MenuItem,
-  FormHelperText,
   Snackbar,
   Alert,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
 import api from "../utils/headers"; // Import Axios instance
 
 const Register = ({ setIsAuthenticated }) => {
